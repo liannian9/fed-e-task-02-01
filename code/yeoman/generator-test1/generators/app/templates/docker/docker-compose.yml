@@ -1,0 +1,12 @@
+version: '3'
+services:
+  shop-plus:
+    image: ${DOCKER_REGISTRY}/shop-plus:${DOCKER_IMAGE_TAG}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shop-plus
+    ports:
+    - 8158:8080
+    volumes:
+      - /home/service/shop-plus/config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties
