@@ -1,7 +1,9 @@
 {
-  "name": "cli",
+  "name": "gulp",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "bin":"cli.js"
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  }
 }
