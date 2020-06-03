@@ -72,7 +72,7 @@ const style = () => {
                 overrideBrowserslist: ["last 3 versions"],
                 cascade: false
             }))
-            // css压缩
+            // css压缩,因为useref处理时会对所有文件进行压缩处理，因此这里不做重复操作
             // .pipe(plugins.cleanCss({
             //     keepSpecialComments: "*"
             // }))
@@ -90,7 +90,7 @@ const javascript = () => {
             //npm install --save-dev gulp-babel@7 babel-core babel-preset-env
                 presets: ['@babel/preset-env']
             }))
-            //js压缩
+            //js压缩,因为useref处理时会对所有文件进行压缩处理，因此这里不做重复操作
             // .pipe(plugins.uglify())
             .pipe(dest("temp"))
             //每次修改刷新页面 与bs的files用途一样 使用一种即可
