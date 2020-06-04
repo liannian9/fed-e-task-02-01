@@ -135,6 +135,7 @@ module.exports = grunt => {
     useminPrepare: {
       html: 'dist/*.html',
       options: { 
+        root:['dist', '.'],
         dest: 'dist' //输出目录
       },
       
@@ -213,7 +214,7 @@ module.exports = grunt => {
 
   //  grunt.loadNpmTasks('grunt-contrib-clean');
   loadGrunttasks(grunt) // 导入所有grunt插件
-  grunt.registerTask('useref', ['useminPrepare', 'concat', 'uglify','cssmin', 'htmlmin', 'usemin'])
+  grunt.registerTask('useref', ['useminPrepare', 'concat', 'uglify','cssmin', 'usemin'])
   grunt.registerTask('dev', ['clean', 'parallel', 'browserSync', 'watch'])
 
   grunt.registerTask('build', ['clean', 'parallel', 'useref'])
