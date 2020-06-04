@@ -55,10 +55,9 @@ const data = {
 module.exports = grunt => {
   // 插件配置项通过grunt.initConfig来初始化
   grunt.initConfig({
-    clean: {
-      temp: 'temp/**',
+    clean: { //文件清除
       dist: 'dist/**',
-      temp2: '.tmp/**',
+      temp: '.tmp/**',
     },
     sass: {
       options: {
@@ -66,9 +65,11 @@ module.exports = grunt => {
         implementation: sass
       },
       main: {
-        files: {
-          'dist/assets/styles/main.css': 'src/assets/styles/main.scss',
-        }
+        expand: true,
+        cwd: 'src/assets/styles/', //原图存放的文件夹
+        src: ['*.scss'], // 优化 img 目录下所有 png/jpg/jpeg/gif图片
+        dest: 'dist/assets/styles/', // 优化后的图片保存位置，覆盖旧图片，并且不作提示
+        ext:'.css'
       }
     },
     babel: {
@@ -76,9 +77,10 @@ module.exports = grunt => {
         presets: ['@babel/preset-env']
       },
       main: {
-        files: {
-          'dist/assets/scripts/main.js': 'src/assets/scripts/main.js',
-        }
+        expand: true,
+        cwd: 'src/assets/scripts/', //原图存放的文件夹
+        src: ['*.js'], // 优化 img 目录下所有 png/jpg/jpeg/gif图片
+        dest: 'dist/assets/scripts/' // 优化后的图片保存位置，覆盖旧图片，并且不作提示
       }
     },
     copy: {
@@ -124,7 +126,6 @@ module.exports = grunt => {
         }
       },
       your_target: {
-
         expand: true,
         cwd: 'src', //原图存放的文件夹
         src: ['*.html'], // 优化 img 目录下所有 png/jpg/jpeg/gif图片
@@ -133,63 +134,47 @@ module.exports = grunt => {
     },
     useminPrepare: {
       html: 'dist/*.html',
-      // options: {
-      //   dest: 'dist',
-      // },
-      build: {
-        files: [{
-          src: 'dist/*.html'
-        }]
+      options: { 
+        dest: 'dist' //输出目录
       },
-      options: {
-        dest: 'dist',
-        flow: {
-            html: {
-                steps: {
-                    // TODO for libs.js block I don't want uglify!
-                    mycss: ['concat'],
-                    js: ['concat', 'uglifyjs'],
-                    css: ['concat', 'cssmin']
-                },
-                post: {}
-            }
-        }
-      }
+      
     },
     usemin: {
       html: ['dist/*.html'], // 注意此处是build/
-      options: {
-        assetsDirs: 'dist',
-        blockReplacements: {
-          // our 'replacement block'
-          mycss: function (block) {
-            console.log(block);
-            return '<script src="' + block.dest + '"></script>';
-          }
-          // no need to redefine default blocks
-        }
-      }
     },
     cssmin: {
       options: {
         compatibility: 'ie8', //设置兼容模式 
         noAdvanced: true //取消高级特性 
       },
+      
       compress: {
         files: {
-          'dist/assets/styles/vendor.css': '.tmp/concat/assets/styles/vendor.css',
-          // 'dist/assets/styles/main.css':'.tmp/concat/assets/styles/main.css',
+          'dist/assets/styles/main.css': 'dist/assets/styles/main.css',
         },
-
+        
       },
-      compress2: {
-        files: {
-          // 'dist/assets/styles/vendor.css':'.tmp/concat/assets/styles/vendor.css',
-          'dist/assets/styles/main.css': '.tmp/concat/assets/styles/main.css',
+    },
+    htmlmin: {                                     // Task
+      dist: {                                      // Target
+        options: {                                 // Target options
+          removeComments: true, //移除注释
+          removeCommentsFromCDATA: true,//移除来自字符数据的注释
+          collapseWhitespace: true,//无用空格
+          collapseBooleanAttributes: true,//失败的布尔属性
+          removeAttributeQuotes: true,//移除属性引号      有些属性不可移走引号
+          removeRedundantAttributes: true,//移除多余的属性
+          useShortDoctype: true,//使用短的跟元素
+          removeEmptyAttributes: true,//移除空的属性
+          removeOptionalTags: true//移除可选附加标签
         },
-
-
-      }
+        expand: true,
+        cwd: 'dist/', //字体文件存放的文件夹
+        src: ['*.html'], // 优化 fonts 目录下所有 字体文件
+        dest: 'dist/' // 优化后的字体文件保存位置，覆盖旧图片，并且不作提示     // 'destination': 'source'
+          
+      },
+      
     },
     browserSync: {
       bsFiles: {
@@ -197,32 +182,40 @@ module.exports = grunt => {
       },
       options: {
         server: {
-          baseDir: "dist/"
+          baseDir:['dist/', 'src', 'public'], //按顺序寻找文件，dist(招不到) ===>src ===>public
+            routes:{
+                '/node_modules':'node_modules' 
+            }
         },
+        
         watchTask: true,
       }
     },
     watch: {
-      options: {
-        livereload: true,
-
-      },
       src: {
         files: ['src/**'],
-        tasks: ['compile'],
+        tasks: ['parallel'],
         options: {
           interrupt: true,
         },
       },
     },
+    parallel: {
+      compile: {
+        options: {
+          grunt: true
+        },
+        tasks: ['sass', 'babel', 'copy', 'imagemin', 'web_swig']
+      }
+    }
   })
 
 
   //  grunt.loadNpmTasks('grunt-contrib-clean');
   loadGrunttasks(grunt) // 导入所有grunt插件
-  grunt.registerTask('compile', ['sass', 'babel', 'copy', 'imagemin', 'web_swig', 'useminPrepare', 'concat', 'uglify', 'usemin'])
-  grunt.registerTask('dev', ['clean', 'sass', 'babel', 'copy', 'imagemin', 'web_swig', 'useminPrepare', 'concat', 'uglify', 'usemin','browserSync', 'watch'])
+  grunt.registerTask('useref', ['useminPrepare', 'concat', 'uglify','cssmin', 'htmlmin', 'usemin'])
+  grunt.registerTask('dev', ['clean', 'parallel', 'browserSync', 'watch'])
 
-  grunt.registerTask('build', ['clean', 'sass', 'babel', 'copy', 'imagemin', 'web_swig', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'usemin'])
+  grunt.registerTask('build', ['clean', 'parallel', 'useref'])
 
 }
