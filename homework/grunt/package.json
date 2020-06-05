@@ -24,12 +24,8 @@
     "url": "https://zce.me"
   },
   "scripts": {
-    "clean": "gulp clean",
-    "lint": "gulp lint",
-    "serve": "gulp serve",
     "build": "yarn grunt build --force",
-    "start": "gulp start",
-    "deploy": "gulp deploy --production"
+    "dev": "yarn grunt dev --force"
   },
   "browserslist": [
     "last 1 version",
@@ -59,7 +55,6 @@
     "grunt-parallel": "^0.5.1",
     "grunt-sass": "^3.1.0",
     "grunt-usemin": "^3.1.1",
-    "grunt-useref": "^0.0.16",
     "grunt-web-swig": "^0.3.1",
     "load-grunt-tasks": "^5.1.0",
     "sass": "^1.26.7"

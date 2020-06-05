@@ -12,6 +12,7 @@
 // 这个Gruntfile.js 文件会自动执行
 // 这部分官网叫做"wrapper(包裹的意思)"函数，它里面需要封装繁琐的配置。
 const loadGrunttasks = require('load-grunt-tasks')
+
 const sass = require('sass')
 
 const data = {
@@ -60,16 +61,28 @@ module.exports = grunt => {
       temp: '.tmp/**',
     },
     sass: {
-      options: {
-        sourceMap: true,
-        implementation: sass
-      },
-      main: {
+      dev:{
+
+        options: {
+          sourceMap: true, //dev启动文件镜像
+          implementation: sass
+        },
         expand: true,
-        cwd: 'src/assets/styles/', //原图存放的文件夹
-        src: ['*.scss'], // 优化 img 目录下所有 png/jpg/jpeg/gif图片
-        dest: 'dist/assets/styles/', // 优化后的图片保存位置，覆盖旧图片，并且不作提示
-        ext:'.css'
+          cwd: 'src/assets/styles/', //样式目录
+          src: ['*.scss'], // 优化 styles 目录下所有 scss
+          dest: 'dist/assets/styles/', // 优化后的文件保存位置
+          ext:'.css'
+      },
+      prod:{
+
+        options: {
+          implementation: sass
+        },
+        expand: true,
+          cwd: 'src/assets/styles/', //样式目录
+          src: ['*.scss'], // 优化 styles 目录下所有 scss
+          dest: 'dist/assets/styles/', // 优化后的文件保存位置
+          ext:'.css'
       }
     },
     babel: {
@@ -78,9 +91,9 @@ module.exports = grunt => {
       },
       main: {
         expand: true,
-        cwd: 'src/assets/scripts/', //原图存放的文件夹
-        src: ['*.js'], // 优化 img 目录下所有 png/jpg/jpeg/gif图片
-        dest: 'dist/assets/scripts/' // 优化后的图片保存位置，覆盖旧图片，并且不作提示
+        cwd: 'src/assets/scripts/', //原js文件存放的文件夹
+        src: ['*.js'], // 优化 scripts目录下所有 js文件
+        dest: 'dist/assets/scripts/' // 优化后的文件保存位置
       }
     },
     copy: {
@@ -99,7 +112,7 @@ module.exports = grunt => {
     imagemin: {
       dynamic: {
         options: {
-          optimizationLevel: 1 //定义 PNG 图片优化水平
+          optimizationLevel: 1 //图片优化水平
         },
         files: [{
             expand: true,
@@ -195,18 +208,24 @@ module.exports = grunt => {
     watch: {
       src: {
         files: ['src/**'],
-        tasks: ['parallel'],
+        tasks: ['parallel:dev'],
         options: {
           interrupt: true,
         },
       },
     },
     parallel: {
-      compile: {
+      dev: {
         options: {
           grunt: true
         },
-        tasks: ['sass', 'babel', 'copy', 'imagemin', 'web_swig']
+        tasks: ['sass:dev','babel', 'copy', 'imagemin', 'web_swig']
+      },
+      prod:{
+        options: {
+          grunt: true
+        },
+        tasks: ['sass:prod','babel', 'copy', 'imagemin', 'web_swig']
       }
     }
   })
@@ -215,8 +234,8 @@ module.exports = grunt => {
   //  grunt.loadNpmTasks('grunt-contrib-clean');
   loadGrunttasks(grunt) // 导入所有grunt插件
   grunt.registerTask('useref', ['useminPrepare', 'concat', 'uglify','cssmin', 'usemin'])
-  grunt.registerTask('dev', ['clean', 'parallel', 'browserSync', 'watch'])
+  grunt.registerTask('dev', ['clean','parallel:dev', 'browserSync', 'watch'])
 
-  grunt.registerTask('build', ['clean', 'parallel', 'useref'])
+  grunt.registerTask('build', ['clean', 'parallel:prod', 'useref'])
 
 }
