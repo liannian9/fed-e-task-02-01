@@ -1,7 +1,8 @@
 {
-  "name": "pages-boilerplate",
+  "name": "gruntfile",
   "version": "0.1.0",
   "private": true,
+  "bin": "gruntfile.js",
   "description": "Always a pleasure scaffolding your awesome static sites.",
   "keywords": [
     "pages-boilerplate",
@@ -25,7 +26,8 @@
   },
   "scripts": {
     "build": "yarn grunt build --force",
-    "dev": "yarn grunt dev --force"
+    "dev": "yarn grunt dev --force",
+    "clean": "yarn grunt clean --force"
   },
   "browserslist": [
     "last 1 version",
@@ -51,6 +53,7 @@
     "grunt-contrib-cssmin": "^3.0.0",
     "grunt-contrib-htmlmin": "^3.1.0",
     "grunt-contrib-imagemin": "^4.0.0",
+    "grunt-contrib-uglify": "^4.0.1",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-parallel": "^0.5.1",
     "grunt-sass": "^3.1.0",

@@ -68,10 +68,10 @@ const style = () => {
             // .pipe(plugins.rename({suffix:'.min'}))
             .pipe(plugins.sass())    
             // 浏览器前缀补全    
-            .pipe(plugins.autoprefixer({
-                overrideBrowserslist: ["last 3 versions"],
-                cascade: false
-            }))
+            // .pipe(plugins.autoprefixer({
+            //     overrideBrowserslist: ["last 3 versions"],
+            //     cascade: false
+            // }))
             // css压缩,因为useref处理时会对所有文件进行压缩处理，因此这里不做重复操作
             // .pipe(plugins.cleanCss({
             //     keepSpecialComments: "*"
@@ -99,7 +99,11 @@ const javascript = () => {
 }
 const html = () => {
     return src("src/*.html", {base:'src'})
-            .pipe(plugins.swig({data}))
+            .pipe(plugins.swig({data, defaults: {
+              //不缓存
+                cache: false
+              }
+       }))
             .pipe(dest("temp"))
             //每次修改刷新页面 与bs的files用途一样 使用一种即可
             .pipe(bs.reload({stream:true}))
@@ -138,7 +142,7 @@ const serve = () => {
     bs.init({
         notify:false, //关闭刷新提示
         port:2000,
-        // files:'dist/**', //监视dist目录文件变化自动更新 与html，javascript，style三个任务中.pipe(bs.reload({stream:true}))用途一样，存在一种即可
+        // files:'temp/**', //监视dist目录文件变化自动更新 与html，javascript，style三个任务中.pipe(bs.reload({stream:true}))用途一样，存在一种即可
         server:{
             baseDir:['temp', 'src', 'public'], //按顺序寻找文件，dist(招不到) ===>src ===>public
             routes:{
@@ -170,5 +174,5 @@ const develop = series(compile, serve)
 module.exports = {
     clean,
     build,
-    develop
+    develop,
 }

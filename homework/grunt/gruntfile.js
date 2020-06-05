@@ -62,7 +62,6 @@ module.exports = grunt => {
     },
     sass: {
       dev:{
-
         options: {
           sourceMap: true, //dev启动文件镜像
           implementation: sass
@@ -74,7 +73,6 @@ module.exports = grunt => {
           ext:'.css'
       },
       prod:{
-
         options: {
           implementation: sass
         },
@@ -197,9 +195,9 @@ module.exports = grunt => {
       options: {
         server: {
           baseDir:['dist/', 'src', 'public'], //按顺序寻找文件，dist(招不到) ===>src ===>public
-            routes:{
-                '/node_modules':'node_modules' 
-            }
+          routes:{
+              '/node_modules':'node_modules' 
+          }
         },
         
         watchTask: true,
@@ -219,7 +217,7 @@ module.exports = grunt => {
         options: {
           grunt: true
         },
-        tasks: ['sass:dev','babel', 'copy', 'imagemin', 'web_swig']
+        tasks: ['sass:dev','babel', 'web_swig']
       },
       prod:{
         options: {
@@ -235,6 +233,6 @@ module.exports = grunt => {
   loadGrunttasks(grunt) // 导入所有grunt插件
   grunt.registerTask('useref', ['useminPrepare', 'concat', 'uglify','cssmin', 'usemin'])
   grunt.registerTask('dev', ['clean','parallel:dev', 'browserSync', 'watch'])
-  grunt.registerTask('build', ['clean', 'parallel:prod', 'useref'])
+  grunt.registerTask('build', ['clean', 'parallel:prod', 'useminPrepare', 'concat', 'uglify','cssmin', 'usemin'])
 
 }
