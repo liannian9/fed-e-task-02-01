@@ -174,5 +174,4 @@ module.exports = {
     clean,
     build,
     develop,
-    useref
 }
