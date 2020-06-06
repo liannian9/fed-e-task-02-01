@@ -233,6 +233,6 @@ module.exports = grunt => {
   loadGrunttasks(grunt) // 导入所有grunt插件
   grunt.registerTask('useref', ['useminPrepare', 'concat', 'uglify','cssmin', 'usemin'])
   grunt.registerTask('dev', ['clean','parallel:dev', 'browserSync', 'watch'])
-  grunt.registerTask('build', ['clean', 'parallel:prod', 'useminPrepare', 'concat', 'uglify','cssmin', 'usemin'])
+  grunt.registerTask('build', ['clean', 'parallel:prod','useref'])
 
 }
