@@ -159,13 +159,12 @@ const useref = () => {
     //有三种文件，htnl，css，js 需要根据类型分别处理
     .pipe(plugins.if(/\.js$/, plugins.uglify()))
     .pipe(plugins.if(/\.css$/, plugins.cleanCss()))
-    .pipe(plugins.if(/\.html$/, plugins.htmlmin({//还有很多其他属性
-        collaspeWhitespace:true,
-        removeComments: true,
+    .pipe(plugins.if(/\.html$/, plugins.htmlmin({ 
+      collapseWhitespace: true,
+      minifyCSS:true,
+      minifyJS:true,
 
-        minifyCSS:true,//压缩css
-        minifyJS:true, //压缩js
-    })))//htmlmin只是压缩空白字符，需要指定参数
+     })))//htmlmin只是压缩空白字符，需要指定参数
     .pipe(dest("dist")) 
 }
 const compile = parallel([style, javascript, html])
@@ -175,4 +174,5 @@ module.exports = {
     clean,
     build,
     develop,
+    useref
 }
