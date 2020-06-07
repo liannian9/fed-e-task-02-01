@@ -43,7 +43,8 @@ part2模块一作业
 实现过程：
     1.初始化生成一个package.json
     2.在package.json中配置bin路径，定义入口文件，并根据路径生成对应文件
-    3.cli文件中对应的入口文件中需要设置 文件头 #!usr/bin/env node,（让系统动态的去查找node来执行你的脚本文件）（如果是linux或者macox系统下还需要修改此文件的读写权限755(chmod 755 cli.js实现权限修改)
+    3.cli文件中对应的入口文件中需要设置 文件头 #!usr/bin/env node,（让系统动态的去查找node来执行你的脚本文件）
+    （如果是linux或者macox系统下还需要修改此文件的读写权限755(chmod 755 cli.js实现权限修改)
     4.编写业务代码
     5.完成之后yarn link(本地全局)/npm publish(发布npm市场)
     6.创建一个文件在文件中进行使用本地直接在命令行输入cli脚手架名，npm下载需要先下载插件然后在命令行输入脚手架名
