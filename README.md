@@ -64,9 +64,38 @@ part2模块一作业
     视频位于 homework/vedio/grunt.mp4
     代码位于homework下的grunt文件
 ```
+### 实现思路
+   - 每次压缩打包前文件清空（grunt-contrib-clean）
+   - sass的编译(grunt-sass, sass) 区分开发生产环境 sass:dev, sass:prod来执行不同环境任务
+   - js的编译(grunt-babel,@babel/core,@babel/preset-env)
+   - html的编译(grunt-web-swig)（如果是模板引擎需要下载相应插件进行转化）
+   - fonts(字体文件的压缩与文件抽离)(grunt-contrib-imagemin)
+   - images的压缩与抽离(grunt-contrib-imagemin)
+   - public内的文件抽离 （直接抽离不压缩，只是浏览器上的小标签或者一些不需要压缩的文件 favicon）
+   - grunt-usemin 这是一款可以将HTML引用的多个CSS和JS合并起来，减小依赖的文件个数，从而减少浏览器发起的请求次数。grunt-usemin根据注释将HTML中需要合并压缩的区块找出来，对区块内的所有文件进行合并。注意：内部整合了concat，cssmin，ungify可以进行文件合并css，js的压缩，这里有个问题，当html'、内压缩后的css文件为复数时，cssmin会报错，这里修改html文件，让html内只压缩一个css文件，其余文件重新创建cssmin任务
+   - 本地服务启动（grunt-browser-sync启动本地服务，grunt-contrib-watch热更新）
+   - 代码构建优化（重新整理构建任务，只暴露出需要的任务）（对于部分任务创建dev及prod不同环境任务）
+   - 优化：
+      + 自动加载所有grunt插件（load-grunt-tasks）
+      + 压缩html
+      + 创建并行任务，（grunt-parallel）
 
 ### 3.尝试使用grunt完成项目的自动化构建
 ```
     视频位于 homework/vedio/gulp.mp4
     代码位于homework下的gulp文件
 ```
+### 实现思路
+   - 每次压缩打包前文件清空（del插件）
+   - scss的编译转换(gulp-sass, gulp-clean-css)
+   - js的编译(gulp-babel,@babel/core,@babel/preset-env, gulp-uglify)
+   - html 的编译 (gulp-htmlmin，gulp-swig)如果是模板引擎需要下载相应插件进行转化）
+   - fonts(字体文件的编译与抽离)(gulp-imagemin)
+   - images的编译与抽离（压缩(gulp-imagemin)
+   - public内的文件抽离 （直接抽离不压缩，只是浏览器上的小标签或者一些不需要压缩的文件 favicon）
+   - useref 这是一款可以将HTML引用的多个CSS和JS合并起来，减小依赖的文件个数，从而减少浏览器发起的请求次数。gulp-useref根据注释将HTML中需要合并压缩的区块找出来，对区块内的所有文件进行合并。注意：它只负责合并，不负责压缩！,如果需要做其他操作，可以配合gulp-if插件使用
+   - 本地服务启动（browerSync启动本地服务，开发环境代码测试，热更新）
+   - 代码构建优化（重新整理构建任务，只暴露出需要的任务，组合出开发与生产环境不同的组合任务）
+   - 相关优化：
+      + 自动加载所有gulp插件（gulp-load-plugins）
+      + 热更新，(watch)
