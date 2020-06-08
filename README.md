@@ -96,6 +96,7 @@ part2模块一作业
    - public内的文件抽离 （直接抽离不压缩，只是浏览器上的小标签或者一些不需要压缩的文件 favicon）
    - useref 这是一款可以将HTML引用的多个CSS和JS合并起来，减小依赖的文件个数，从而减少浏览器发起的请求次数。gulp-useref根据注释将HTML中需要合并压缩的区块找出来，对区块内的所有文件进行合并。注意：它只负责合并，不负责压缩！,如果需要做其他操作，可以配合gulp-if插件使用
    - 本地服务启动（browerSync启动本地服务，开发环境代码测试，热更新）
+   - gulp-gh-pages 进行部署 https://liannian9.github.io/ghpages/ (直接使用会报错插件需要修改进入node_modules/gulp_gh_pages升级插件 npm install --save gift@0.10.2)
    - 代码构建优化（重新整理构建任务，只暴露出需要的任务，组合出开发与生产环境不同的组合任务）
    - 相关优化：
       + 自动加载所有gulp插件（gulp-load-plugins）

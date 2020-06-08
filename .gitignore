@@ -5,3 +5,4 @@ dist
 temp
 .tmp
 .git
+.publish
