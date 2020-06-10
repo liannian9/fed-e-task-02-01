@@ -151,7 +151,7 @@ const useref = () => {
         minifyJS:true,
     })))//htmlmin只是压缩空白字符，需要指定参数
     .pipe(dest(confg.build.dist)) 
-}
+}s
 const compile = parallel([style, javascript, html])
 const build = series(clean, parallel([series(compile, useref), fonts, images, extra]))
 const develop = series(compile, serve)
